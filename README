@@ -1,0 +1,20 @@
+
+
+BASIC USAGE
+
+string rules=Stdio.read_file("Wiki.pmod/wiki_rules.txt");
+object w = Wiki.RenderEngine(rules);
+w->render("this __is__ a\\\\ test...");
+
+REAL USAGE
+
+You'll probably want to impliment your own RenderEngine. Start by inheriting the RenderEngine 
+and then impliment at least the following methods:
+
+public void appendLink(String.Buffer buf, string name, string view, string|void anchor)
+
+public void appendCreateLink(String.Buffer buf, string name, string view)
+
+public int(0..1) showCreate()
+
+public int(0..1) exists(string name)
