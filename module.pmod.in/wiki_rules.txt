@@ -1,0 +1,33 @@
+regex.bold.match=(^|>|[[:punct:][:space:]]+)__(.*?)__($|<|[[:punct:][:space:]]+)
+regex.bold.print=$1<b class="bold">$2</b>$3
+regex.ital.match=(^|>|[[:punct:][:space:]]+)~~(.*?)~~($|<|[[:punct:][:space:]]+)
+regex.ital.print=$1<i class="ital">$2</i>$3
+regex.line.match=-{5,}
+regex.line.print=<hr class="line"/>\n
+regex.break.match=\\\\
+regex.break.print=<br class="break"/>\n
+regex.newline.match=\n{2,}
+regex.newline.print=<p/>\n
+regex.url.match=([[:space:]]|^)((http|ftp)s?://(%[[:digit:]A-Fa-f][[:digit:]A-Fa-f]|[-_.!~*';/?:@#&=+$,[:alnum:]])+)
+#regex.url.match=([^\"'=]|^)((http|ftp)s?://(%[[:digit:]A-Fa-f][[:digit:]A-Fa-f]|[-_.!~*';/?:@#&=+$,[:alnum:]])+)
+regex.url.print=$1<span class="nobr"><a href="$2">$2</a></span>
+regex.heading.match=^[[:space:]]*(1(?:\.1)?)[[:space:]]+(.*?)$
+regex.heading.print=<h3 class="heading-$1">$2</h3>
+#regex.strikethrough.match=([^!-]|^)--((?:(?:[^-]+)-?)+)--([^-]|$)
+#regex.strikethrough.print=$1<strike class="strike">$2</strike>$3
+regex.key.match=((Ctrl|Alt|Shift|Cmd|Meta)-[^ ]*)
+regex.key.print=<span class="key">$1</span>
+regex.typography.match=([^.]|^)[.][.][.](?!\\.)( |$)
+regex.typography.print=$1&#8230;$2
+regex.paragraph.match=([ \t\r]*[\n]){2}
+regex.paragraph.print=<p class="paragraph"/>\n
+filter.list.match=(^[[:space:]]*([-#*]+|[-#*]*[iIaA1ghHkKj]+\.)[[:space:]]+([^\r\n]+)[\r\n]*)+
+filter.list.class=Public.Web.Wiki.Filters.List
+filter.link.match=\[(.*?)\]
+filter.link.class=Public.Web.Wiki.Filters.Link
+macros.format.match={([a-z\-_0-9]+):?(.*?)}
+macro.hello.class=Public.Web.Wiki.Macros.Hello
+macro.link.class=Public.Web.Wiki.Macros.Link
+macro.code.class=Public.Web.Wiki.Macros.Code
+macro.macro-list.class=Public.Web.Wiki.Macros.MacroList
+

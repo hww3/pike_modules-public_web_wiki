@@ -1,0 +1,7 @@
+# $Id: configure.in,v 1.1.1.1 2005-10-13 02:37:53 hww3 Exp $
+AC_INIT(module.pmod.in/RenderEngine.pike)
+
+AC_MODULE_INIT()
+
+AC_OUTPUT(Makefile)
+
