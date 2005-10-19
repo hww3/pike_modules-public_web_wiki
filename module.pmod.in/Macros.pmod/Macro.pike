@@ -6,7 +6,8 @@ string describe()
    return "Base Macro";
 }
 
-void evaluate(String.Buffer buf, array input, RenderEngine engine, mixed|void extras)
+void evaluate(String.Buffer buf, .MacroParameters params)
 {
-  buf->add("macro " + input[0] + " called");
+  buf->add("macro " + params->parameters[0] + " called");
+  buf->add(sprintf("params: %O", mkmapping(indices(params), values(params))));
 }

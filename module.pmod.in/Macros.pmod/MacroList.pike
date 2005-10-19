@@ -6,10 +6,10 @@ string describe()
 {
    return "Lists all Macros";
 }
-void evaluate(String.Buffer buf, array input, RenderEngine engine, mixed|void extras)
+void evaluate(String.Buffer buf, .MacroParameters params)
 {
   
-  foreach(engine->macros; string name; Macros.Macro macro)
+  foreach(params->engine->macros; string name; Macros.Macro macro)
   {
      buf->add("<p>\nname: ");
      buf->add(name);

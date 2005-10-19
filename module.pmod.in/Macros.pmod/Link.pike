@@ -7,29 +7,29 @@ string describe()
    return "Handles external links";
 }
 
-void evaluate(String.Buffer buf, array input, RenderEngine engine, mixed|void extras)
+void evaluate(String.Buffer buf, .MacroParameters params)
 {
-  if(sizeof(input) !=2) 
+  if(sizeof(params->parameters) !=2) 
   {  
     buf->add("INVALID LINK");
     return;
   }
 
   string link, name;
-  int f = search(input[1], "|");
+  int f = search(params->parameters[1], "|");
 
   if(f > 0)
   {
-    name = input[1][0..f-1];
-    link = input[1][(f+1)..];
+    name = params->parameters[1][0..f-1];
+    link = params->parameters[1][(f+1)..];
   }
   else if(f==0)
   {
-    name=link=input[1][1..];
+    name=link=params->parameters[1][1..];
   }
   else 
   {
-    name=link=input[1];
+    name=link=params->parameters[1];
   }
 
   buf->add("<a href=\"");

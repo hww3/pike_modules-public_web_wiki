@@ -1,7 +1,7 @@
   inherit .Filter;
   import Public.Web.Wiki;
 
-  public void filter(String.Buffer buf, string match, array|void components, mixed|void extra)
+  public void filter(String.Buffer buf, string match, array|void components, RenderEngine engine, mixed|void extra)
   {
     string linkspec = "/";
 

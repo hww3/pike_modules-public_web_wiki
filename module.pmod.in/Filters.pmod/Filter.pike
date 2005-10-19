@@ -1,11 +1,15 @@
   import Public.Web.Wiki;
 
-  static RenderEngine engine;
+  static mapping extra;
 
-  static void create(RenderEngine e)
+  static void create(mapping _extras)
   {
-    engine = e;
+    extra = _extras;
   }
 
-  public void filter(String.Buffer buf, string match, array|void components, mixed|void extra);
+  public void filter(String.Buffer buf, string match, array|void components, RenderEngine engine, mixed|void context);
 
+  public int priority()
+  {
+     return 99;
+  }

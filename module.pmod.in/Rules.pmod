@@ -1,9 +1,15 @@
 
 class BaseRule{
 
+  constant type = "BaseRule";
   static object regexp;
   static function split_fun;
   int max_iterations = 10;
+
+  string _sprintf(mixed ... args)
+  {
+     return sprintf("%s(%s)", type, regexp->pattern);
+  }
 
   void create(string match) {
     regexp = _Regexp_PCRE(match, Regexp.PCRE.OPTION.MULTILINE);
@@ -47,63 +53,32 @@ class BaseRule{
 
 class Filter {
    inherit BaseRule;
+   constant type = "FilterRule";
    string classname;
-   program filter_prog;
+   object filter_prog;
 
-   void create(string match, string cls)
+   void create(string match, string cls, mapping extras)
    {
       ::create(match);
-      filter_prog = master()->resolv(cls);
+      filter_prog = master()->resolv(cls)(extras);
    }
 
-   void filter(String.Buffer buf, string input, .RenderEngine engine, mixed|void extra)
+   void filter(String.Buffer buf, string input, .RenderEngine engine, mixed|void context)
    {
-werror("Rule.Filter.filter()\n");
       replace(buf, input, lambda(String.Buffer buf, string a, mixed|void b){
                      if(b){
-                         filter_prog(engine)->filter(buf, a, b, extra);
+                         filter_prog->filter(buf, a, b, engine, context);
                         }
                         else
-                          filter_prog(engine)->filter(buf, a, ({}), extra);
+                          filter_prog->filter(buf, a, ({}), engine, context);
                     }
                   );
 
    }
 }
-
-class Regex {
-   inherit BaseRule;
-   static string dest;
-
-   void create(string match, string to)
-   {
-     ::create(match);
-     dest = predef::replace(to, "\\n", "\n");
-   }
-
-   void full_replace(String.Buffer buf, string input)
-   {
-      replace(buf, input, lambda(String.Buffer buf, string a, mixed b){
-                     if(b){
-			array replacements = ({"$0"});
-                        for(int i=1; i<=sizeof(b); i++)
-                           replacements+=({"$"+i});
-                         buf->add(predef::replace(dest ,replacements, ({a})+b));
-                        }
-                        else
-                          buf->add(dest);
-                    }
-                  );
-   }
-
-
-
-}
-
 
 class Macro {
    inherit BaseRule;
-   static string dest;
 
    void create(string match)
    {
@@ -113,14 +88,23 @@ class Macro {
    void full_replace(String.Buffer buf, string input, mapping macros, 
                                            .RenderEngine engine, mixed|void extras)
    {
+      
       replace(buf, input, lambda(String.Buffer buf, string a, mixed b){
                      if(b){
                           if(!macros[b[0]])
-                            buf->add(a);
-                          else
                           {
-                            macros[b[0]]->evaluate(buf, b, engine, extras);
+                            buf->add(a);
                           }
+                          else
+                           {
+                              werror("calling macro %s\n", b[0]);
+                              .Macros.MacroParameters p = .Macros.MacroParameters();
+                              p->engine = engine;
+                              p->extras = extras;
+                              p->parameters = b;
+                              macros[b[0]]->evaluate(buf, p);
+                                                      
+                            }
                         }
                         else
                           buf->add(a);
