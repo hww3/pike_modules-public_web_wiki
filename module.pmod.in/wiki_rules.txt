@@ -44,4 +44,6 @@ macro.code.class=Public.Web.Wiki.Macros.Code
 macro.boggle.class=Public.Web.Wiki.Macros.Boggle
 macro.api.class=Public.Web.Wiki.Macros.Api
 macro.macro-list.class=Public.Web.Wiki.Macros.MacroList
+macro.recent-changes.class=Public.Web.Wiki.Macros.RecentChanges
+macro.table.class=Public.Web.Wiki.Macros.Table
 
