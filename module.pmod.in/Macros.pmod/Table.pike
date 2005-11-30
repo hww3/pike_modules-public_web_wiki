@@ -9,9 +9,9 @@ string describe()
 
 void evaluate(String.Buffer buf, .MacroParameters params)
 {
-  if(sizeof(params->parameters)>2)
+  if(params->contents && sizeof(params->contents))
   {
-    array lines = String.trim_whites(params->parameters[2])/"\n";
+    array lines = String.trim_all_whites(params->contents)/"\n";
     
     if(!sizeof(lines)) return;
 

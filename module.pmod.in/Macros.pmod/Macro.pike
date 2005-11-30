@@ -8,6 +8,6 @@ string describe()
 
 void evaluate(String.Buffer buf, .MacroParameters params)
 {
-  buf->add("macro " + params->parameters[0] + " called");
+  buf->add("macro " + params->name + " called");
   buf->add(sprintf("params: %O", mkmapping(indices(params), values(params))));
 }

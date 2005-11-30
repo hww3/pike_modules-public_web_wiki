@@ -57,9 +57,15 @@ class Filter {
    string classname;
    object filter_prog;
 
+   string _sprintf(mixed...args)
+   {  
+      return "Filter(" + classname + ")";
+   }
+
    void create(string match, string cls, mapping extras)
    {
       ::create(match);
+      classname = cls;
       filter_prog = master()->resolv(cls)(extras);
    }
 
@@ -97,11 +103,16 @@ class Macro {
                           }
                           else
                            {
-                              werror("calling macro %s\n", b[0]);
+//                              werror("calling macro %s: %O\n", b[0], b);
                               .Macros.MacroParameters p = .Macros.MacroParameters();
                               p->engine = engine;
                               p->extras = extras;
-                              p->parameters = b;
+                              p->name = b[0];
+                              p->parameters = b[1];
+			      if(sizeof(b)>2)
+                                p->contents = b[2];
+  //                            werror("calling macro %O\n", 
+//					mkmapping(indices(p), values(p)));
                               macros[b[0]]->evaluate(buf, p);
                                                       
                             }

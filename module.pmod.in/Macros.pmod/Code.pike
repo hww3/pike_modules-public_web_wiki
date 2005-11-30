@@ -10,8 +10,7 @@ string describe()
 void evaluate(String.Buffer buf, .MacroParameters params)
 {
    buf->add("<div class=\"code\"><pre>");
-   werror("code: |%O|", params->parameters);
-   if(sizeof(params->parameters)>2)
-     buf->add(replace(params->parameters[2], ({"&", "<", ">", "[", "\\"}), ({"&amp;", "&lt;", "&gt;", "&#91;", "&#92;"})));
+   if(params->contents)
+     buf->add(replace(params->contents, ({"&", "<", ">", "[", "\\"}), ({"&amp;", "&lt;", "&gt;", "&#91;", "&#92;"})));
 	buf->add("</pre></div>\n");  
 }

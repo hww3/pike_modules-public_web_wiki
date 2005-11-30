@@ -9,34 +9,34 @@ string describe()
 
 void evaluate(String.Buffer buf, .MacroParameters params)
 {
-  if(sizeof(params->parameters) !=2) 
+  if(!sizeof(params->parameters)) 
   {  
     buf->add("INVALID API");
     return;
   }
 
   string symbol, lang;
-  int f = search(params->parameters[1], "|");
+  int f = search(params->parameters, "|");
 
   if(f > 0)
   {
-    lang = params->parameters[1][0..f-1];
+    lang = params->parameters[0..f-1];
     if(!sscanf(lang, "lang=%s", lang));
     {
       buf->add("INVALID API LANGUAGE " + lang);
       return;
     }
-    symbol = params->parameters[1][(f+1)..];
+    symbol = params->parameters[(f+1)..];
   }
   else if(f==0)
   {
     lang="pike";
-    symbol=params->parameters[1][1..];
+    symbol=params->parameters[1..];
   }
   else 
   {
     lang="pike";
-    symbol=params->parameters[1];
+    symbol=params->parameters;
   }
 
   string link = "";
