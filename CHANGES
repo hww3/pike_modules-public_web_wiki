@@ -1,3 +1,8 @@
+Changes since version 1.2
+
+- classes can be loaded from the program path as well as the module path
+- updates for macro parameters actually making it in. a few new macros
+
 Changes since version 1.1
 
 - build fixes
