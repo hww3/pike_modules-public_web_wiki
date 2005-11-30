@@ -3,4 +3,6 @@ import Public.Web.Wiki;
 
 RenderEngine engine;
 mapping extras;
-array parameters;
+string name;
+string parameters;
+string contents;
