@@ -116,7 +116,7 @@ void load_macrodef_rule(mapping md_r)
       continue;
     }
 
-werror("loading macro: %s", key);
+   werror("loading macro: %s\n", key);
     macros[key] = r();
 
   }
@@ -139,6 +139,8 @@ void load_filter_rules(mapping f_r)
   }
   
   sort(priorities, filter_rules);
+
+  werror("%O\n", filter_rules);
 }
 
 
@@ -209,5 +211,11 @@ public void appendCreateLink(String.Buffer buf, string name, string view)
 
 program load_class(string cls)
 {
-  return master()->resolv(cls);
+  program p;
+  p = master()->resolv(cls);
+
+  if(!p)
+    p = (program)cls;
+
+  return p;
 }
