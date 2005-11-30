@@ -1,3 +1,8 @@
+Changes since version 1.1
+
+- build fixes
+- changed Macro.MacroParameters to have more sensible memebers
+
 Changes since version 1.0
 
 - added some more macros
