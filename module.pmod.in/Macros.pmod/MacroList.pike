@@ -6,14 +6,18 @@ string describe()
 {
    return "Lists all Macros";
 }
-void evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(.MacroParameters params)
 {
-  
+  array res = ({});
   foreach(params->engine->macros; string name; Macros.Macro macro)
   {
-     buf->add("<p>\nname: ");
-     buf->add(name);
-     buf->add("<br>\ndescription: ");
-     buf->add(macro->describe());
+     res += ({("<p>\nname: "), name, "<br>\ndescription: ", macro->describe()});
   }
+  return res;
+}
+
+
+int is_cacheable()
+{
+	return 0;
 }

@@ -36,18 +36,20 @@
     '1': "</ol>"
   ]);
 
-  public void filter(String.Buffer buf, string match, array|void components, mixed|void extra)
+  public array filter(string match, array|void components, mixed|void extra)
   {
-    addlist(buf, match);
+     return addlist(match);
 
   }
 
 
-  private void addlist(String.Buffer buf, string match)
+  private array addlist(string match)
   {
     string lastBullet = "";
     string line;
-        
+    array res = ({});
+    object buf = String.Buffer();
+
     foreach(match/"\n";;line)
     {
       line = String.trim_whites(line);
@@ -93,5 +95,8 @@
     {
       buf->add(closeList[lastBullet[i]]);
     }
+
+	res += ({ buf->get()});
+	return res;
 
   }

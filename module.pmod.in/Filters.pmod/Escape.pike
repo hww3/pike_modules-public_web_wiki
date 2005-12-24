@@ -1,18 +1,18 @@
   inherit .Filter;
   import Public.Web.Wiki;
 
-  public void filter(String.Buffer buf, string match, array|void components, mixed|void extra)
+  public array filter(string match, array|void components, mixed|void extra)
   {
-     werror("Escape Filter:%O / %O\n", match, components);
+//     werror("Escape Filter:%O / %O\n", match, components);
      if(sizeof(components))
      {
         if(strlen(components[0]))
         {
-           buf->add("&#92;&#92;");
+           return({"&#92;&#92;"});
         }
         else if(strlen(components[1]))
         {
-           buf->add(encode(components[1]));
+           return({encode(components[1])});
         }
      }
   }

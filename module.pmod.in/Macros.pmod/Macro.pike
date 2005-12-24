@@ -6,8 +6,17 @@ string describe()
    return "Base Macro";
 }
 
-void evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(String.Buffer buf, .MacroParameters params)
 {
-  buf->add("macro " + params->name + " called");
-  buf->add(sprintf("params: %O", mkmapping(indices(params), values(params))));
+  array res = ({});
+
+  res += ({ ("macro " + params->name + " called"),
+    sprintf("params: %O", mkmapping(indices(params), values(params)))
+  });
+  return res;
+}
+
+int is_cacheable()
+{
+	return 1;
 }

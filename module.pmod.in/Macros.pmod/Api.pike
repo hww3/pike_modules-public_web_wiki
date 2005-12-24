@@ -7,12 +7,11 @@ string describe()
    return "Makes links to API references, supports pike, php and perl.";
 }
 
-void evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(.MacroParameters params)
 {
   if(!sizeof(params->parameters)) 
   {  
-    buf->add("INVALID API");
-    return;
+    return ({"INVALID API"});
   }
 
   string symbol, lang;
@@ -23,8 +22,7 @@ void evaluate(String.Buffer buf, .MacroParameters params)
     lang = params->parameters[0..f-1];
     if(!sscanf(lang, "lang=%s", lang));
     {
-      buf->add("INVALID API LANGUAGE " + lang);
-      return;
+      return ({"INVALID API LANGUAGE " + lang});
     }
     symbol = params->parameters[(f+1)..];
   }
@@ -54,15 +52,9 @@ void evaluate(String.Buffer buf, .MacroParameters params)
       link = "http://perldoc.perl.org/search.html?q=" + symbol;
 
     default:
-      buf->add("INVALID API LANGUAGE " + lang);
-      return;
-
+      return ({"INVALID API LANGUAGE " + lang});
 
   }
 
-  buf->add("<a href=\"");
-  buf->add(link);
-  buf->add("\">");
-  buf->add(symbol);
-  buf->add("</a>");
+  return ({"<a href=\"", link, "\">", symbol, "</a>"});
 }

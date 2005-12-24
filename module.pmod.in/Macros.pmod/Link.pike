@@ -7,12 +7,13 @@ string describe()
    return "Handles external links";
 }
 
-void evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(.MacroParameters params)
 {
+	array res = ({});
+	
   if(!sizeof(params->parameters)) 
   {  
-    buf->add("INVALID LINK");
-    return;
+   	return ({"INVALID LINK"});
   }
 
   string link, name;
@@ -32,9 +33,7 @@ void evaluate(String.Buffer buf, .MacroParameters params)
     name=link=params->parameters;
   }
 
-  buf->add("<a href=\"");
-  buf->add(link);
-  buf->add("\">");
-  buf->add(name);
-  buf->add("</a>");
+  res+=({"<a href=\"", link, "\">", name, "</a>"});
+
+	return res;
 }

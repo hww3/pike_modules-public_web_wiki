@@ -1,8 +1,9 @@
   inherit .Filter;
   import Public.Web.Wiki;
 
-  public void filter(String.Buffer buf, string match, array|void components, RenderEngine engine, mixed|void extra)
+  public array filter(string match, array|void components, RenderEngine engine, mixed|void extra)
   {
+	 array res = ({});
     string linkspec = "/";
 
     if(extra && extra->linkspec)
@@ -23,6 +24,8 @@
 
     view = (name/linkspec)[-1];    
 
+	 object buf = String.Buffer();
+
     if(engine->exists(name))
     {
        if(anchor)
@@ -38,8 +41,9 @@
       }
       else
       {
-        buf->add(match);
+        return({match});
       }
     }
+	return ({buf->get()});
   }
 

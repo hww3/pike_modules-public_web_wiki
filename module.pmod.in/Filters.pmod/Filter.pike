@@ -7,9 +7,14 @@
     extra = _extras;
   }
 
-  public void filter(String.Buffer buf, string match, array|void components, RenderEngine engine, mixed|void context);
+  public array filter(string match, array|void components, RenderEngine engine, mixed|void context);
 
   public int priority()
   {
      return 99;
   }
+
+	int is_cacheable()
+	{
+		return 1;
+	}

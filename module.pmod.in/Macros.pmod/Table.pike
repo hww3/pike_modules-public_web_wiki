@@ -7,30 +7,29 @@ string describe()
    return "Table Generator";
 }
 
-void evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(.MacroParameters params)
 {
+	array res = ({});
   if(params->contents && sizeof(params->contents))
   {
     array lines = String.trim_all_whites(params->contents)/"\n";
     
-    if(!sizeof(lines)) return;
+    if(!sizeof(lines)) return ({});
 
-    buf->add("<table>\n");
+    res += ({"<table>\n"});
 
     array row;    
 
     row=lines[0]/"|";
 
-    buf->add("<tr>\n");
+    res += ({"<tr>\n"});
 
     foreach(row, string th)
     {
-      buf->add("<th>");
-      buf->add(th);
-      buf->add("</th>\n");
+      res += ({"<th>", th, "</th>\n"});
     }
 
-    buf->add("</tr>");
+    res += ({"</tr>"});
 
     
     if(sizeof(lines)>1) 
@@ -39,20 +38,18 @@ void evaluate(String.Buffer buf, .MacroParameters params)
       {
         row=line/"|";
 
-        buf->add("<tr>\n");
+        res += ({"<tr>\n"});
   
         foreach(row, string td)
         {
-          buf->add("<td>");
-          buf->add(td);
-          buf->add("</td>\n");
+          res += ({"<td>", td, "</td>\n"});
         }
 
-        buf->add("</tr>\n");
+        res += ({"</tr>\n"});
       }
     }
 
-    buf->add("</table>\n");
+    res += ({"</table>\n"});
   }  
-
+  return res;
 }

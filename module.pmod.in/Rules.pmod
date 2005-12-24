@@ -16,9 +16,11 @@ class BaseRule{
     split_fun = regexp->split;
   }
 
-   void replace(String.Buffer buf, string subject,string|function(String.Buffer,string,array|void:string) with)
+   array replace(string subject,string|function with, mixed|void ... args)
    {
       int i=0;
+		array res = ({});
+		
       for (;;)
       {
          array substrings = ({});
@@ -26,7 +28,7 @@ class BaseRule{
 
          if (intp(v) && !regexp->handle_exec_error([int]v)) break;
 
-         if (v[0]>i) buf->add(subject[i..v[0]-1]);
+         if (v[0]>i) res+=({subject[i..v[0]-1]});
 
          if(sizeof(v)>2)
          {
@@ -39,13 +41,15 @@ class BaseRule{
            while(c<= (sizeof(v)-2));
          }
 
-         if (stringp(with)) buf->add(with);
-         else with(buf, subject[v[0]..v[1]-1], substrings);
-
+         if (stringp(with)) res+=({with});
+           else { array o = with(subject[v[0]..v[1]-1], substrings, @args); res+=o; }
+ 
          i=v[1];
       }
 
-      buf->add(subject[i..]);
+      res+=({subject[i..]});
+
+		return res;
 
    }
 
@@ -69,60 +73,148 @@ class Filter {
       filter_prog = master()->resolv(cls)(extras);
    }
 
-   void filter(String.Buffer buf, string input, .RenderEngine engine, mixed|void context)
+   array filter(array input, .RenderEngine engine, mixed|void context)
    {
-      replace(buf, input, lambda(String.Buffer buf, string a, mixed|void b){
-                     if(b){
-                         filter_prog->filter(buf, a, b, engine, context);
-                        }
-                        else
-                          filter_prog->filter(buf, a, ({}), engine, context);
-                    }
-                  );
-
+		array res = ({});
+		foreach(input;; mixed item)
+		  	if(stringp(item))
+        		res += replace(item, filter_processor, engine, context);
+ 			else res += ({item});
+		return res;
    }
+
+	array filter_processor(string a, mixed|void b, object engine, mixed|void context)
+	{
+	   if(b){
+			object r = ReplacerObject(filter_prog->filter);
+			r->set(a, b);
+			if(filter_prog->is_cacheable())
+			{
+			//	werror("cacheable!\n");
+			 	return r->render(engine, context);
+			}
+			else return ({r});
+	   }
+	  else
+		{
+			
+	 		object r = ReplacerObject(filter_prog->filter);
+			r->set(a, ({}));
+			if(filter_prog->is_cacheable())
+			{
+			//	werror("cacheable!\n");
+				return r->render(engine, context);
+			}
+			else return ({r});
+		}
+	}
+	
+	class ReplacerObject(function with)
+	{
+		string match;
+		array substrings;
+		int cacheable;
+		
+		void set(string _match, array _substrings)
+		{
+			match = _match;
+			substrings = _substrings;
+		}
+		
+		array render(object engine, mixed extras)
+		{
+			return with(match, substrings, engine, extras);
+		}
+		
+		string _sprintf(mixed t)
+		{
+			return "Replacer(" + match + ")";
+		}
+	}
+
 }
 
 class Macro {
    inherit BaseRule;
+ //  program replacer_class = MacroReplacerObject;
 
    void create(string match)
    {
      ::create(match);
    }
 
-   void full_replace(String.Buffer buf, string input, mapping macros, 
+   array full_replace(array input, mapping macros, 
                                            .RenderEngine engine, mixed|void extras)
    {
-      
-      replace(buf, input, lambda(String.Buffer buf, string a, mixed b){
-                     if(b){
-                          if(!macros[b[0]])
-                          {
-                            buf->add(a);
-                          }
-                          else
-                           {
-//                              werror("calling macro %s: %O\n", b[0], b);
-                              .Macros.MacroParameters p = .Macros.MacroParameters();
-                              p->engine = engine;
-                              p->extras = extras;
-                              p->name = b[0];
-                              p->parameters = b[1];
-			      if(sizeof(b)>2)
-                                p->contents = b[2];
-  //                            werror("calling macro %O\n", 
-//					mkmapping(indices(p), values(p)));
-                              macros[b[0]]->evaluate(buf, p);
-                                                      
-                            }
-                        }
-                        else
-                          buf->add(a);
-                    }
-                  );
-   }
 
+      array a = ({});
+
+		foreach(input;; mixed item)
+		{ 
+			// no sense in trying to replace something that's a render object.
+			if(objectp(item))
+				a += ({item});
+			else
+			{
+				a+=replace(item, macro_processor, macros, engine, extras);
+				
+			}
+		}
+
+		return a;
+	}
+
+
+	
+					array macro_processor(string a, mixed|void b, mapping macros, object engine, mixed|void extras)
+					{
+						array res = ({});
+
+                 	if(b)
+						{
+       					if(!macros[b[0]])
+		               {
+		      				res+=({a});
+		                          }
+		               else
+		       			{
+		//                              werror("calling macro %s: %O\n", b[0], b);
+									if(macros[b[0]]->is_cacheable())
+													res += MacroReplacerObject(macros[b[0]]->evaluate, b)->render(engine, extras);
+								else
+		                  	res += ({MacroReplacerObject(macros[b[0]]->evaluate, b)});
+
+		                           }
+		                       	}
+		            else
+		              res+=({a});
+						return res;
+		         }
+
+						class MacroReplacerObject(function with, array b)
+						{
+							string match;
+							array substrings;
+							int cacheable;
+
+							array render(object engine, mixed extras)
+							{
+
+									                   .Macros.MacroParameters p = .Macros.MacroParameters(); 
+							                      	p->engine = engine;
+									                              p->extras = extras;
+									                              p->name = b[0];
+									                              p->parameters = b[1];
+												      if(sizeof(b)>2)
+									                                p->contents = b[2];
+								return with(p);
+							}
+
+							string _sprintf(mixed t)
+							{
+								return "Replacer(" + b[0] + ")";
+							}
+						}
 
 
 }

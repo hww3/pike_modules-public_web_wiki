@@ -9,24 +9,83 @@ mapping f_r = ([]);
 mapping m_r = ([]);
 mapping md_r = ([]);
 
-string render(string input, mixed|void extras)
+string render(string i, mixed|void extras)
+{
+  return output(compile(i, extras), extras);	
+}
+
+array compile(string i, mixed|void extras)
 {
   if(!extras)
     extras = (["foo":123]);
 
-  String.Buffer buf = String.Buffer();
+  array input = ({i});
+  array output;
 
-  macro_rule->full_replace(buf, input, macros, this, extras);  
-  input = buf->get();
+  output = macro_rule->full_replace(input, macros, this, extras);  
+
+  input = output;
 
   foreach(filter_rules; int i; .Rules.Filter rule)
    {
-     // werror("Running Rule %d: %O\n", i, rule);
-     rule->filter(buf, input, this, extras);
-     input = buf->get();
+	  int last_was_string = 0;
+		string running = "";
+		array x = ({});
+		foreach(input; int z; mixed val)
+		{
+			if(val && stringp(val))
+			{
+				running += val;
+				last_was_string = 1;
+			}
+			if(last_was_string && !stringp(val))
+			{
+				last_was_string = 0;
+				x += ({running});
+				running = "";
+				x += ({val});
+			}
+		}
+		if(strlen(running))
+		{
+		  x += ({running});
+		}
+		input = x;
+//     werror("Running Rule %d: %O, %O\n", i, rule, input);
+     output = rule->filter(input, this, extras);
+//     werror("Got output from rule: %O\n", output);
+     input = output;
    }
 
+  // ok, by this point, we should have an array containing chunks of text, or
+  // renderer objects.
   return input;
+}
+
+string output(array input, mixed|void extras)
+{
+  String.Buffer buf = String.Buffer();
+
+  foreach(input;; mixed item)
+  {
+		if(arrayp(item))
+			buf->add(output(item, extras));
+     else if(stringp(item))
+		buf->add(item);
+	  else
+			foreach(item->render(this, extras);;mixed i)
+			{
+//				werror("%O\n", i);
+			if(stringp(i))
+				buf->add(i);
+			else if(arrayp(i))
+			  buf->add(output(i, extras));
+			else if(objectp(i)) buf->add(output(i->render(this, extras), extras));
+			else error("invalid result.\n");
+		}
+  }
+
+  return buf->get();
 }
 
 
