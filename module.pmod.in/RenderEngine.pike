@@ -91,6 +91,8 @@ string output(array input, mixed|void extras)
 
 void create(string|void rulefile)
 {
+  if(!rulefile) rulefile = .RuleFile.default_rules;
+
   foreach(rulefile/"\n";int lineno;string line)
   {
     string key,value;
@@ -175,7 +177,7 @@ void load_macrodef_rule(mapping md_r)
       continue;
     }
 
-   werror("loading macro: %s\n", key);
+   //werror("loading macro: %s\n", key);
     macros[key] = r();
 
   }
@@ -199,7 +201,7 @@ void load_filter_rules(mapping f_r)
   
   sort(priorities, filter_rules);
 
-  werror("%O\n", filter_rules);
+  //werror("%O\n", filter_rules);
 }
 
 
