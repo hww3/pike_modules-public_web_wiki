@@ -178,11 +178,14 @@ void load_macrodef_rule(mapping md_r)
     }
 
    //werror("loading macro: %s\n", key);
-    macros[key] = r();
-
+    add_macro(key, r());
   }
 }
 
+void add_macro(string name, object code)
+{
+  macros[name] = code;
+}
 
 void load_filter_rules(mapping f_r)
 {
