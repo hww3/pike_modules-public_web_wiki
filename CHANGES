@@ -1,5 +1,7 @@
 Changes since version 1.4
 
+- made some minor api cleanups and added force argument to RenderEngine()
+  ->render(), which isn't actually used by the base implimentation.
 - added public method for adding macros on-the-fly.
 
 Changes since version 1.3
