@@ -6,7 +6,7 @@ string describe()
    return "Base Macro";
 }
 
-array evaluate(String.Buffer buf, .MacroParameters params)
+array evaluate(.MacroParameters params)
 {
   array res = ({});
 

@@ -9,7 +9,7 @@ mapping f_r = ([]);
 mapping m_r = ([]);
 mapping md_r = ([]);
 
-string render(string i, mixed|void extras)
+string render(string i, mixed|void extras, int|void force)
 {
   return output(compile(i, extras), extras);	
 }
