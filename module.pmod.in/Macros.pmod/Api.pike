@@ -12,7 +12,10 @@ string describe()
 array evaluate(.MacroParameters params)
 {
   string symbol, lang;
-  int f = search(params->parameters, "|");
+
+  symbol = params->contents;
+
+  if(!symbol) return ({"INVALID API SYMBOL"});
 
   if(!params->args) params->make_args();
 
@@ -38,8 +41,6 @@ array evaluate(.MacroParameters params)
       return ({"INVALID API LANGUAGE " + lang});
 
   }
-
-  symbol = params->contents;
 
   return ({"<a href=\"", link, "\">", symbol, "</a>"});
 }
