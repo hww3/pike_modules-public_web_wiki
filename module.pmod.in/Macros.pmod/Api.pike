@@ -11,11 +11,6 @@ string describe()
 
 array evaluate(.MacroParameters params)
 {
-  if(!sizeof(params->parameters)) 
-  {  
-    return ({"INVALID API"});
-  }
-
   string symbol, lang;
   int f = search(params->parameters, "|");
 
