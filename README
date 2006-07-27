@@ -1,9 +1,8 @@
 
 
 BASIC USAGE
-
-string rules=Stdio.read_file("Wiki.pmod/wiki_rules.txt");
-object w = Wiki.RenderEngine(rules);
+import Public.Web;
+object w = Wiki.RenderEngine(Wiki.RuleFile.default_rules);
 w->render("this __is__ a\\\\ test...");
 
 REAL USAGE
