@@ -1,7 +1,7 @@
 //! the base macro.
 import Public.Web.Wiki;
 
-int has_content = 0;
+int is_container = 0;
 
 string describe()
 {
