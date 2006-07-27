@@ -17,21 +17,16 @@ array evaluate(.MacroParameters params)
   }
 
   string link, name;
-  int f = search(params->parameters, "|");
 
-  if(f > 0)
-  {
-    name = params->parameters[0..f-1];
-    link = params->parameters[(f+1)..];
-  }
-  else if(f==0)
-  {
-    name=link=params->parameters[1..];
-  }
-  else 
-  {
-    name=link=params->parameters;
-  }
+  if(!params->args) params->make_args();
+
+  array a = indices(params->args);
+
+  name = a[-1];
+  if(sizeof(a) > 1)
+    link = a[-2];
+  else
+    link = a[-1];
 
   res+=({"<a href=\"", link, "\">", name, "</a>"});
 

@@ -2,6 +2,8 @@ import Public.Web.Wiki;
 
 inherit .Macro;
 
+int has_content = 1;
+
 string describe()
 {
    return "Makes links to API references, supports pike, php and perl.";
@@ -17,25 +19,11 @@ array evaluate(.MacroParameters params)
   string symbol, lang;
   int f = search(params->parameters, "|");
 
-  if(f > 0)
-  {
-    lang = params->parameters[0..f-1];
-    if(!sscanf(lang, "lang=%s", lang));
-    {
-      return ({"INVALID API LANGUAGE " + lang});
-    }
-    symbol = params->parameters[(f+1)..];
-  }
-  else if(f==0)
-  {
-    lang="pike";
-    symbol=params->parameters[1..];
-  }
-  else 
-  {
-    lang="pike";
-    symbol=params->parameters;
-  }
+  if(!params->args) params->make_args();
+
+  lang = "pike";
+
+  if(params->args->lang) lang = params->args->lang;
 
   string link = "";
 
@@ -55,6 +43,8 @@ array evaluate(.MacroParameters params)
       return ({"INVALID API LANGUAGE " + lang});
 
   }
+
+  symbol = params->contents;
 
   return ({"<a href=\"", link, "\">", symbol, "</a>"});
 }

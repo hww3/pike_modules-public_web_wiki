@@ -1,6 +1,8 @@
 //! the base macro.
 import Public.Web.Wiki;
 
+int has_content = 0;
+
 string describe()
 {
    return "Base Macro";

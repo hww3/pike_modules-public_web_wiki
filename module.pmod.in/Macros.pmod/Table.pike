@@ -2,6 +2,8 @@ import Public.Web.Wiki;
 
 inherit .Macro;
 
+int has_content = 1;
+
 string describe()
 {
    return "Table Generator";
