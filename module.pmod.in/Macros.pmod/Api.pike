@@ -2,7 +2,7 @@ import Public.Web.Wiki;
 
 inherit .Macro;
 
-int is_container = 1;
+constant is_container = 1;
 
 string describe()
 {
