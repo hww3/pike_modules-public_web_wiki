@@ -1,3 +1,8 @@
+Changes since version 1.5
+
+- added macro parameter handling code.
+- we don't recommend the use of positional parameters in macros.
+
 Changes since version 1.4
 
 - made some minor api cleanups and added force argument to RenderEngine()
