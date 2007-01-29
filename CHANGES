@@ -1,3 +1,10 @@
+Changes since version 1.6
+
+- fix that makes List elements (-----) work more reliably
+- tighten up the syntax for list items (a space as a separator for 
+beween the line is now the only valid trigger, rather than any space 
+characters). 
+
 Changes since version 1.5
 
 - added macro parameter handling code.
