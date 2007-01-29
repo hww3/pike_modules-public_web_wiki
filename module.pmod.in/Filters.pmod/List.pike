@@ -50,13 +50,17 @@
     array res = ({});
     object buf = String.Buffer();
 
+    match = replace(match, "\r\n", "\n");
+
     foreach(match/"\n";;line)
     {
+      if(!line) continue;
       line = String.trim_whites(line);
       if(!sizeof(line))
         continue;
 
       int bulletend = search(line, " ");
+
       if(bulletend < 1)
         continue;
       if(line[bulletend-1]=='.')
@@ -75,18 +79,20 @@
 
       for(int i = sharedPrefixEnd; i< sizeof(lastBullet); i++)
       {
-        buf->add(closeList[lastBullet[i]]);
+        if(closeList[lastBullet[i]])
+          buf->add(closeList[lastBullet[i]]);
         buf->add("\n");
       }
 
       for(int i = sharedPrefixEnd; i< sizeof(bullet); i++)
       {
-        buf->add(openList[bullet[i]]);
+	if((openList[bullet[i]])
+          buf->add(openList[bullet[i]]);
         buf->add("\n");
       }
 
       buf->add("<li>");
-      buf->add(line[search(line, " ")+1..]);
+      buf->add(line[search(line, " ")+1..] || "");
       buf->add("</li>\n");
       lastBullet = bullet;
     }

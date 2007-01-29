@@ -31,7 +31,7 @@ filter.typography.class=Public.Web.Wiki.Filters.Typography
 filter.paragraph.match=([ \\t\\r]*[\\n]){2}
 filter.paragraph.print=<p class=\"paragraph\"/>\n
 filter.paragraph.class=Public.Web.Wiki.Filters.Paragraph
-filter.list.match=(^[[:space:]]*([-#*]+|[-#*]*[iIaA1ghHkKj]+\\.)[[:space:]]+([^\\r\\n]+)[\\r\\n]*)+
+filter.list.match=(^[[:space:]]*([-#*]+|[-#*]*[iIaA1ghHkKj]+\\.)[ ]+([^\\r\\n]+)[\\r\\n]*)+
 filter.list.class=Public.Web.Wiki.Filters.List
 filter.link.match=\\[(.*?)\\]
 filter.link.class=Public.Web.Wiki.Filters.Link
