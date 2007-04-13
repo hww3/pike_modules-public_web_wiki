@@ -86,7 +86,7 @@
 
       for(int i = sharedPrefixEnd; i< sizeof(bullet); i++)
       {
-	if((openList[bullet[i]])
+	if(openList[bullet[i]])
           buf->add(openList[bullet[i]]);
         buf->add("\n");
       }
