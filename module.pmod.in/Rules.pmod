@@ -12,7 +12,7 @@ class BaseRule{
   }
 
   void create(string match) {
-    regexp = _Regexp_PCRE(match, Regexp.PCRE.OPTION.MULTILINE);
+    regexp = Regexp.PCRE(match, Regexp.PCRE.OPTION.MULTILINE);
     split_fun = regexp->split;
   }
 
