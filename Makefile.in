@@ -8,6 +8,7 @@ OBJS=
 MODDIR=Public.pmod/Web.pmod/
 MODNAME=Wiki
 AUTODOC_SRC_IN=
+
 MODULE_NAME=Public.Web.Wiki
 MODULE_DIR_NAME=Public_Web_Wiki
 MODULE_LICENSE=GPL/LGPL/MPL
