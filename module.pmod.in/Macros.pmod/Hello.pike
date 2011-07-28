@@ -6,3 +6,4 @@ string describe()
 {
    return "Hello World macro";
 }
+

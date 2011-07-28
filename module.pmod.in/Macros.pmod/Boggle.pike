@@ -6,3 +6,4 @@ string describe()
 {
    return "Boggle macro";
 }
+
