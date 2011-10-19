@@ -1,2 +1,4 @@
-preparse wiki markup to speed subsequent renders (completed in 1.4)
+- preparse wiki markup to speed subsequent renders (completed in 1.4)
 
+- properly escape | in macros that use it (table, for instance) in content as well as 
+for those that use it to separate arguments.
