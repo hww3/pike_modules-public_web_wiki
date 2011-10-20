@@ -3,7 +3,6 @@
 
   public array filter(string match, array|void components, mixed|void extra)
   {
-     werror("Escape Filter:%O / %O\n", match, components);
      if(sizeof(components))
      {
         if(strlen(components[0]))
