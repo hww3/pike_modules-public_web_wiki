@@ -18,38 +18,64 @@ class BaseRule{
 
    array replace(string subject,string|function with, mixed|void ... args)
    {
-      int i=0;
-		array res = ({});
+    int i=0;
+    array res = ({});
 		
-      for (;;)
+    for (;;)
+    {
+      array substrings = ({});
+      array(int)|int v=regexp->exec(subject,i);
+
+      if (intp(v) && !regexp->handle_exec_error([int]v)) break;
+
+      if (v[0]>i) res+=({subject[i..v[0]-1]});
+
+      if(sizeof(v)>2)
       {
-         array substrings = ({});
-         array(int)|int v=regexp->exec(subject,i);
+        int c = 2;
+        do
+        {
+           substrings += ({ subject[v[c]..(v[c+1]-1)] });
+           c+=2;
+        }
+        while(c<= (sizeof(v)-2));
+      }
 
-         if (intp(v) && !regexp->handle_exec_error([int]v)) break;
 
-         if (v[0]>i) res+=({subject[i..v[0]-1]});
-
-         if(sizeof(v)>2)
-         {
-           int c = 2;
-           do
-           {
-             substrings += ({ subject[v[c]..(v[c+1]-1)] });
-             c+=2;
-           }
-           while(c<= (sizeof(v)-2));
-         }
-
-         if (stringp(with)) res+=({with});
-           else { array o = with(subject[v[0]..v[1]-1], substrings, @args); res+=o; }
+      if 
+         (stringp(with)) res+=({with});
+      else 
+      { 
+        array o = with(subject[v[0]..v[1]-1], substrings, @args); 
+        res+=o; 
+      }
  
          i=v[1];
       }
 
       res+=({subject[i..]});
 
-		return res;
+
+  // now, let's collapse.
+
+  String.Buffer buf = String.Buffer();
+  array out = ({});
+
+  foreach(res;; mixed entry)
+  {
+    if(stringp(entry))
+      buf+=entry;
+    else
+    {
+      string t = buf->get();
+      buf = String.Buffer();
+      if(strlen(t)) out+=({t});
+      out += ({entry});
+    }
+  }
+  out += ({buf->get()});
+
+  return out;
 
    }
 
@@ -178,11 +204,11 @@ class Macro {
 		                          }
 		               else
 		       			{
-		//                              werror("calling macro %s: %O\n", b[0], b);
-									if(macros[b[0]]->is_cacheable())
-													res += MacroReplacerObject(macros[b[0]]->evaluate, b)->render(engine, extras);
-								else
-		                  	res += ({MacroReplacerObject(macros[b[0]]->evaluate, b)});
+		                              // werror("calling macro %s: %O\n", b[0], b);
+					if(macros[b[0]]->is_cacheable())
+		 			  res += MacroReplacerObject(macros[b[0]]->evaluate, b)->render(engine, extras);
+					else
+		                    	  res += ({MacroReplacerObject(macros[b[0]]->evaluate, b)});
 
 		                           }
 		                       	}

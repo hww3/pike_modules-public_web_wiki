@@ -11,7 +11,7 @@ string describe()
 
 array evaluate(.MacroParameters params)
 {
-	array res = ({});
+  array res = ({});
   if(params->contents && sizeof(params->contents))
   {
     array lines = String.trim_all_whites(params->contents)/"\n";

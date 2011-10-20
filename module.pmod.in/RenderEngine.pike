@@ -2,6 +2,11 @@
 array (.Rules.Filter) filter_rules = ({});
 mapping (string:.Macros.Macro) macros = ([]);
 
+// break and escape are two special filters that should
+// be run first, in that order.
+.Rules.Filter break_rule;
+.Rules.Filter escape_rule;
+
 .Rules.Macro macro_rule;
 
 array priorities = ({});
@@ -20,11 +25,14 @@ array compile(string i, mixed|void extras)
     extras = (["foo":123]);
 
   array input = ({i});
-  array output;
+  array output =input;
+  
+  input = break_rule->filter(input, this, extras);
+  input = escape_rule->filter(input, this, extras);
 
-  output = macro_rule->full_replace(input, macros, this, extras);  
+//  werror("filtered: %O\n", output);
 
-  input = output;
+  input = macro_rule->full_replace(input, macros, this, extras);  
 
   foreach(filter_rules; int i; .Rules.Filter rule)
    {
@@ -59,7 +67,7 @@ array compile(string i, mixed|void extras)
 
   // ok, by this point, we should have an array containing chunks of text, or
   // renderer objects.
-  return input;
+  return output;
 }
 
 string output(array input, mixed|void extras)
@@ -156,7 +164,6 @@ void load_macro_rule(mapping m_r)
       werror("incomplete rule definition for %s.\n", key);
 
     object r = .Rules.Macro(value->match);
-
     macro_rule = r;
 
   }
@@ -198,6 +205,17 @@ void load_filter_rules(mapping f_r)
 
     object r = .Rules.Filter(value->match, value->class, value);
 
+    if(key=="escape")
+    {
+      escape_rule = r;
+      continue;
+    }
+
+    if(key=="break")
+    {
+      break_rule = r;
+      continue;
+    }
     filter_rules+=({r});
     priorities += ({ r->filter_prog->priority()});
   }
