@@ -1,3 +1,8 @@
+Changes since version 1.7
+
+- escaping special characters should work properly now, as it is done
+  as virtually the first operation, after line (not paragraph) breaks).
+
 Changes since version 1.6
 
 - fix that makes List elements (-----) work more reliably
