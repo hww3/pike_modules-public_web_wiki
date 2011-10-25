@@ -204,11 +204,12 @@ class Macro {
 		                          }
 		               else
 		       			{
-		                              // werror("calling macro %s: %O\n", b[0], b);
 					if(macros[b[0]]->is_cacheable())
 		 			  res += MacroReplacerObject(macros[b[0]]->evaluate, b)->render(engine, extras);
 					else
+{
 		                    	  res += ({MacroReplacerObject(macros[b[0]]->evaluate, b)});
+}
 
 		                           }
 		                       	}
