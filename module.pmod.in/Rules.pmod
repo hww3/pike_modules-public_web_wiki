@@ -192,31 +192,29 @@ class Macro {
 
 
 	
-					array macro_processor(string a, mixed|void b, mapping macros, object engine, mixed|void extras)
-					{
-						array res = ({});
+  array macro_processor(string a, mixed|void submatches, mapping macros, object engine, mixed|void extras)
+  {
+	  array res = ({});
 
-                 	if(b)
-						{
-       					if(!macros[b[0]])
-		               {
-		      				res+=({a});
-		                          }
-		               else
-		       			{
-					if(macros[b[0]]->is_cacheable())
-		 			  res += MacroReplacerObject(macros[b[0]]->evaluate, b)->render(engine, extras);
-					else
-{
-		                    	  res += ({MacroReplacerObject(macros[b[0]]->evaluate, b)});
-}
-
-		                           }
-		                       	}
-		            else
-		              res+=({a});
-						return res;
-		         }
+  	if(submatches)
+		{
+  		if(!macros[submatches[0]])
+	    {
+				res+=({a});
+		  }
+		  else
+		  {
+		    // werror("calling macro %s: %O\n", b[0], b);
+				if(macros[submatches[0]]->is_cacheable())
+		 		  res += MacroReplacerObject(macros[submatches[0]]->evaluate, submatches)->render(engine, extras);
+				else
+		  	  res += ({MacroReplacerObject(macros[submatches[0]]->evaluate, submatches)});
+      }
+		}
+	  else
+	    res+=({a});
+	return res;
+ }
 
 						class MacroReplacerObject(function with, array b)
 						{
