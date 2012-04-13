@@ -18,7 +18,7 @@ array evaluate(.MacroParameters params)
     
     if(!sizeof(lines)) return ({});
 
-    res += ({"<table>\n"});
+    res += ({"<table _parsed=\"1\">\n"});
 
     array row;    
 
