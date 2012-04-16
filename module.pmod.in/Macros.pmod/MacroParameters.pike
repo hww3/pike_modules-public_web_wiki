@@ -37,7 +37,7 @@ void make_args()
          string key = e[0..l-1];
          key = replace(key, "\\=", "=");
          string value = e[l+1..];
-         args[key] = value;
+         args[String.trim_all_whites(key)] = String.trim_all_whites(value);
          l=-1;
       }
     } while (l!=-1);
