@@ -7,6 +7,8 @@ string describe()
    return "Handles external links";
 }
 
+// format
+// {link:url|text}
 array evaluate(.MacroParameters params)
 {
 	array res = ({});

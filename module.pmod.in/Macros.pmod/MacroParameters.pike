@@ -8,6 +8,13 @@ string parameters;
 string contents;
 mapping args;
 
+
+// the format for a macro is
+// {macro:arg1=val1|arg2=val2|argn=valn}
+// or
+// {macro:arg1|arg2|argn}
+//
+// which results in arg1 through argn each having a value of "1"
 void make_args()
 {
   args = ([]);
