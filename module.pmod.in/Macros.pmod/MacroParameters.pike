@@ -6,18 +6,13 @@ mapping extras;
 string name;
 string parameters;
 string contents;
+array positions;
 mapping args;
 
-
-// the format for a macro is
-// {macro:arg1=val1|arg2=val2|argn=valn}
-// or
-// {macro:arg1|arg2|argn}
-//
-// which results in arg1 through argn each having a value of "1"
 void make_args()
 {
   args = ([]);
+  positions = ({});
 
   if(!parameters) return;
 
@@ -31,6 +26,7 @@ void make_args()
       if(l == -1)
       {
         args[e] = "1"; // a simple argument with no value.
+        positions += ({e});
         continue;
       }
       if(e[l-1] == '\\') // ah, we're trying to escape!
@@ -44,7 +40,9 @@ void make_args()
          string key = e[0..l-1];
          key = replace(key, "\\=", "=");
          string value = e[l+1..];
-         args[String.trim_all_whites(key)] = String.trim_all_whites(value);
+         key = String.trim_all_whites(key);
+         args[key] = String.trim_all_whites(value);
+         positions += ({key});
          l=-1;
       }
     } while (l!=-1);
